@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import { DATABASE } from "./config.js";
-
+import authRoutes from "./routes/auth.js"
 const app = express();
 //db
 mongoose
@@ -16,12 +16,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
-// routes
-app.get("/api", (req, res) => {
-  res.json({
-    data: "Hello from nodejs api"
-  });
-});
+//routes middleware
+app.use('/api', authRoutes) //prefix
 
 app.listen(8000, () => {
   "Listening on port 8000....";
