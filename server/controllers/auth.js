@@ -175,3 +175,29 @@ export const refreshToken = async (req, res) => {
     return res.status(403).json({ error: 'Refresh token failed.' });
   }
 };
+
+export const currentUser = async (req, res) => { 
+  try {
+    const user = await User.findById(req.user._id)
+    user.password = undefined
+    user.resetCode = undefined
+    res.json(user)
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({ error: 'Unauthorized.' });
+  }
+};
+
+
+export const publicProfile = async (req, res) => { 
+  try {
+    const user = await User.findOne({username: req.params.username})
+    user.password = undefined
+    user.resetCode = undefined
+    res.json(user)
+  } catch (error) {
+    console.log(error);
+    return res.json({ error: 'User not found.' });
+  }
+};
+
