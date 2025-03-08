@@ -84,3 +84,32 @@ export const register = async (req, res) => {
     return res.json({ error: "Somthine went wrong. Try again." });
   }
 };
+
+export const login = async (req, res) => { 
+  try {
+    const {email, password} = req.body
+    // 1 find user by email
+    const user = await User.findOne({email})
+    // 2 compare password
+    const match = await comparePassword(password, user.password)
+    if (!match) {
+      return res.json({err: "Wrong password"})
+    }
+    // 3 create jwt token
+    const token = jwt.sign({_id: user._id}, config.JWT_SECRET, {
+      expiresIn: "1h"
+    })
+    const refreshToken = jwt.sign({_id: user._id}, config.JWT_SECRET, {
+      expiresIn: "7d"
+    })
+    // 4 send the reponse
+    user.password = undefined // password not sent to res
+    user.resetCode = undefined
+    return res.json({
+      token, refreshToken, user
+    })
+  } catch (error) {
+    console.log(err);
+    return res.json({ error: "Somthine went wrong. Try again." });
+  }
+};
