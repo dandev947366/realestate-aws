@@ -5,7 +5,7 @@ const expect = chai.expect;
 
 describe('GET /', () => {
   after(() => {
-    server.close(); // Ensure the server stops after the test
+    app.close(); // Ensure the server stops after the test
   });
   it('should return an error with an invalid token', async () => {
     const response = await request(app)
