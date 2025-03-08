@@ -22,3 +22,5 @@ app.use('/api', authRoutes) //prefix
 app.listen(8000, () => {
   "Listening on port 8000....";
 });
+
+export { app };
