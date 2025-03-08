@@ -12,17 +12,40 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]  # Test across different Node.js versions
+        node-version: [18.x]  # Test on Node.js 18.x
 
     steps:
-    - uses: actions/checkout@v4  # Checkout the repository code
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Checkout repository
+      uses: actions/checkout@v4  # Fetch repo code
+
+    - name: Set up Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'  # Cache Yarn dependencies
+
+    - name: Create .env file
+      run: |
+        echo "DATABASE=${{ secrets.DATABASE }}" >> .env
+        echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+        echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+        echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> .env
+        echo "REPLY_TO=${{ secrets.REPLY_TO }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        echo "DEV_CLIENT_URL=${{ secrets.DEV_CLIENT_URL }}" >> .env
+        echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+
     - name: Install dependencies
       run: yarn install
+
     - name: Run tests
       run: yarn test
-  
+      env:
+        DATABASE: ${{ secrets.DATABASE }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+        REPLY_TO: ${{ secrets.REPLY_TO }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        DEV_CLIENT_URL: ${{ secrets.DEV_CLIENT_URL }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
