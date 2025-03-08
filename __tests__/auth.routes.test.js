@@ -4,7 +4,8 @@ const expect = chai.expect;
 import { app, server } from "../server.js";
 describe('GET /', () => {
   after(() => {
-    server.close(); // Ensure the server stops after the test
+    server.close(); 
+    console.log("Server close.")
   });
   it('should return an error with an invalid token', async () => {
     const response = await request(app)
