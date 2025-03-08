@@ -197,7 +197,7 @@ export const publicProfile = async (req, res) => {
     res.json(user)
   } catch (error) {
     console.log(error);
-    return res.json({ error: 'User not found.' });
+    return res.status(404).json({ error: 'User not found.' });
   }
 };
 export const updatePassword = async (req, res) => { 
