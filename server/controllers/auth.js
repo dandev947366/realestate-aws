@@ -1,5 +1,5 @@
 import * as config from "../config.js"
-
+import jwt from 'jsonwebtoken'
 export const welcome = (req, res) => {
     res.json({
       data: "Hello from nodejs api auth"
@@ -8,7 +8,10 @@ export const welcome = (req, res) => {
 
 export const preRegister = async (req, res) => {
   try{
-    console.log(req.body)
+    const {email, password} = req.body
+    const token = jwt.sign({email, password}, config.JWT_SECRET, {
+      expiresIn: "1h" //1 hour -options: 1w 1y
+    })
     config.AWSSES.sendEmail({
       Source: config.EMAIL_FROM,
       Destination: {
@@ -19,7 +22,11 @@ export const preRegister = async (req, res) => {
           Html: {
             Charset: "UTF-8",
             Data: `
+            <html>
               <h1>Welcome to Real Estate AWS</h1>
+              <p>Please click the link below to activate your account</p>
+              <a href="${config.DEV_CLIENT_URL}/auth/account-activate/${token}">Activate my account</a>
+            </html>
             `
           }
         },
@@ -38,6 +45,16 @@ export const preRegister = async (req, res) => {
     })
   }
   catch(err){
+    console.log(err)
+    return res.json({error: "Somthine went wrong. Try again."})
+  }
+}
+
+export const register = async(req, res) => {
+  try {
+    console.log(req.body)
+    
+  } catch(err) {
     console.log(err)
     return res.json({error: "Somthine went wrong. Try again."})
   }
