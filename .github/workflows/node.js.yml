@@ -31,7 +31,7 @@ jobs:
         echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
         echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> .env
         echo "REPLY_TO=${{ secrets.REPLY_TO }}" >> .env
-        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        echo "JWT_SECRET=123123123123" >> .env
         echo "DEV_CLIENT_URL=${{ secrets.DEV_CLIENT_URL }}" >> .env
         echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
 
