@@ -19,8 +19,8 @@ app.use(cors());
 //routes middleware
 app.use('/api', authRoutes) //prefix
 
-app.listen(8000, () => {
-  "Listening on port 8000....";
+const server = app.listen(8000, () => {
+  console.log('Server is running on port 8000');
 });
 
-export { app };
+export { app, server }; 
